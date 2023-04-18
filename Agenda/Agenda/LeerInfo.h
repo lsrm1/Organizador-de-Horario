@@ -3,9 +3,26 @@
 #include <fstream>
 using namespace std;
 
+void contarhoraest(int &n_horaest){
+
+    int i = 0;
+
+    ifstream estudio;
+    estudio.open("horasestudio.txt");
+
+    while(estudio.good()){
+
+        estudio >> i;
+        n_horaest++;
+    }
+
+
+    materia.close();
+}
+
 void contarmater (int &n_mate){
 
-    char linea[10] = {};
+    char linea[15] = {};
 
     ifstream materia;
     materia.open("materia.txt");
@@ -16,12 +33,11 @@ void contarmater (int &n_mate){
         n_mate++;
     }
 
-    n_mate--;
 
     materia.close();
 }
 
-void leerbase(int codigos[],int creditos[],int h_estudio[],int n_mate){
+void leerbase(int codigos[],int h_estudio[],int n_mate){
 
     int n = 0;
 
@@ -31,7 +47,6 @@ void leerbase(int codigos[],int creditos[],int h_estudio[],int n_mate){
     while(n < n_mate){
 
         base>>codigos[n];
-        base>>creditos[n];
         base>>h_estudio[n];
 
 
@@ -42,31 +57,52 @@ void leerbase(int codigos[],int creditos[],int h_estudio[],int n_mate){
 
 }
 
-void nombre_mate (int line_materia)
-{
+void nombre_mate (int line_materia,int posicion){
+
     ifstream archivo;
     archivo.open("materia.txt");
-    char nombre [12] = {};
+    char nombre [15] = {};
+    int i = 0;
+    int t = 0
 
-    for (int t = 0; t <= line_materia; t++)
+    for (t = 0; t <= line_materia; t++)
     {
         archivo>>nombre;
     }
 
+
+    while (nombre[i] != '\0'){
+
+        i++;
+    }
+
+    cout<<" ";
+
+    //for (t
+    cout<<nombre;
+
+    while(i < 15){
+
+        cout<<" ";
+        i++;
+    }
+
+    cout<<"|";
+
+    i = 0;
+
     archivo.close();
 
-    cout<<"  ";
-    cout<<nombre;
-    cout<<"  |";
+
 
 }
 
-void imprimir(int n_mate,int codigos[])
-{
-    cout<<"                                  TU HORARIO                                            \n";
-    cout<<"------------------------------------------------------------------------------------------\n";
-    cout<<" Hora|   Lunes   | Martes    | Miercoles |  Jueves   |  Viernes  | Sabado    | Domingo   |\n" ;
-    cout<<"------------------------------------------------------------------------------------------\n";
+void imprimir(int n_mate,int codigos[]){
+
+    cout<<"                                                 TU HORARIO                                                                  \n";
+    cout<<"-----------------------------------------------------------------------------------------------------------------------------\n";
+    cout<<" Hora|       Lunes     |    Martes      |    Miercoles   |     Jueves     |     Viernes    |    Sabado      |     Domingo   |\n";
+    cout<<"-----------------------------------------------------------------------------------------------------------------------------\n";
 
 
     ifstream horariotxt;
@@ -79,6 +115,8 @@ void imprimir(int n_mate,int codigos[])
     int dia = 0;
     int valor = 0;
     int n_dias = 7;
+
+    int posicion = 1;
 
 
     while (hora <= n_horas){
@@ -111,11 +149,12 @@ void imprimir(int n_mate,int codigos[])
 
             else{
 
-                cout<<"     -     ";
+                cout<<"       -        ";
                 cout<<"|";
             }
 
             dia++;
+            posicion++;
 
         }
 
@@ -127,10 +166,10 @@ void imprimir(int n_mate,int codigos[])
 
     horariotxt.close();
 
-    cout<<"------------------------------------------------------------------------------------------\n";
+    cout<<"-----------------------------------------------------------------------------------------------------------------------------\n";
 }
 
-void modificarhorario(int codigo,int opcion){
+void modificarhorario(int codigo,int &resta,int menu){
 
     ifstream horariotxt;
     horariotxt.open("horario.txt");
@@ -149,18 +188,31 @@ void modificarhorario(int codigo,int opcion){
     int materia = 0;
     int n_hora = 0;
 
-    if(opcion == 3){
 
-        materia = codigo;
-    }
+    materia = codigo;
+
 
     cout<<"Que dia estudiaras esta materia? \n";
-    cout<<"1.Lunes  2.Martes   3.Miercoles   4.Jueves   5.Viernes  6.Sabado\n Selecciona:";cin>>dia_modif;
-    cout<<"A que hora?(6:00-22:00): ";cin>>hora_modif;
-    cout<<"Cuantas horas?: ";cin>> n_hora;
+    cout<<"1.Lunes  2.Martes   3.Miercoles   4.Jueves   5.Viernes  6.Sabado  7.Domingo\n Selecciona: ";cin>>dia_modif;
+    cout<<"\nA que hora?(6:00-22:00): ";cin>>hora_modif;
+    cout<<"\nCuantas horas?: ";cin>> n_hora;
+
+    resta = n_hora;
 
 
-    int pos_modif = ((hora_modif-6)*7)+dia_modif;
+    int pos_modif = ((hora_modif - hora_ini)*n_dias)+dia_modif;
+
+    if (menu == 2){
+
+        ofstream estudio;
+        estudio.open("horasestudio.txt",ios::app);
+
+        estudio<<pos_modif<<" ";
+
+        estudio.close();
+
+    }
+
     int posicion = 1;
 
 
@@ -176,7 +228,7 @@ void modificarhorario(int codigo,int opcion){
 
                 if (n_hora > 1){
 
-                    pos_modif += 7;
+                    pos_modif += n_dias;
                     n_hora--;
                 }
 
@@ -208,7 +260,7 @@ void modificarhorario(int codigo,int opcion){
 
 void agregarmateria(int &codigo){
 
-    char nombre[12];
+    char nombre[15];
     int credito = 0;
     int h_clase = 0;
 
@@ -224,7 +276,6 @@ void agregarmateria(int &codigo){
     cout<<"Horas de clase a la semana: ";cin>>h_clase;
 
     base<<codigo<< " ";
-    base<<credito<<" ";
     base<<((credito*48)-(h_clase*16))/16;
 
     materia<<nombre;
@@ -272,13 +323,54 @@ void actualizarhorario(){
 
 }
 
-void menuprincipal(int &opcion){
+void menuprincipal(int &menu){
 
-    cout<<"                                   MENU PRINCIPAL\n";
-    cout<<"________________________________________________________________________________________\n";
+    cout<<"\nMENU PRINCIPAL\n";
     cout<<"\n1.Ver horario\n2.Programar horas de estudio\n3.Agregar materia al horario\n4.Salir\n\nSelecciona:";
-    cin>>opcion;
+    cin>>menu;
+    cout<<"__________________________________________________\n";
 
+
+}
+
+void infoestudio(int h_estudio[], int n_mate){
+
+    int total = 0;
+
+    for(int j = 0; j < n_mate; j++){
+
+        total += h_estudio[j];
+
+    }
+
+    cout<<"Tienes un total de "<<total<<" horas de estudio por programar: \n\n";
+
+    for(int j = 0; j < n_mate; j++){
+
+        if (h_estudio[j] > 0){
+
+            cout<<j<<".";
+            nombre_mate(j);
+            cout<<"Debes programar "<<h_estudio[j]<<" horas\n";
+
+        }
+    }
+
+}
+
+void actualizarbase(int codigos[],int h_estudio[],int n_mate){
+
+    ofstream base;
+    base.open("base.txt");
+
+    for (int i = 0; i < n_mate; i++) {
+
+        base<<codigos[i]<<" ";
+        base<<h_estudio[i]<<"\n";
+
+    }
+
+    base.close();
 
 }
 
