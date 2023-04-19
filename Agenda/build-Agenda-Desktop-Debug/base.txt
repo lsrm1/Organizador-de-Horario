@@ -1,7 +1,7 @@
-11111 4 5 
-22222 3 5
-33333 3 5
-44444 3 5
-55555 1 1
-66666 3 5
-77777 3 5
+2555101 Algebra 5
+2555121 Geometria 5
+2555131 Calculo 5
+2598521 Informatica-II 5
+2539101 Probabilidad 5
+2598115 Ingles-II 5
+7777777 Telematica 5
