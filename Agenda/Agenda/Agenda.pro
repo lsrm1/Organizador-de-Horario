@@ -7,4 +7,4 @@ SOURCES += \
         main.cpp
 
 HEADERS += \
-    LeerInfo.h
+    Funciones.h
