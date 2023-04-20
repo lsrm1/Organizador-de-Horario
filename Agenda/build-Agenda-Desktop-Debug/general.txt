@@ -1,4 +1,4 @@
-2555101 Algebra 3 4 5
-2555121 Geometria 3 4 5
-2555131 Calculo 3 4 5
-2598521 Informatica-II 4 7 5
+2555101 Algebra-Lineal 3 4 5
+2558908 Calculo-Vec 3 4 5
+2567897 Lectoescritura 1 4 1
+2545678 Geometria-Vec 3 4 5

@@ -1,7 +1,80 @@
 #ifndef FUNCIONES_H
 #define FUNCIONES_H
 #include <fstream>
+
 using namespace std;
+
+// Gestion de materias
+
+void agregarmateria(int &codigo,int codigos[],int n_mate,int &h_clase){
+
+    int credito = 0;
+    int htp = 0;
+    bool verificar = true;
+
+    char nombre[15]={};
+
+    ofstream base;
+    base.open("base.txt",ios::app);
+
+    ofstream materia;
+    materia.open("materia.txt",ios::app);
+
+    ofstream general;
+    general.open("general.txt",ios::app);
+
+
+
+    while(verificar){
+
+        verificar = false;
+        cout<<"Codigo: ";cin>>codigo;
+
+
+
+        for (int t = 0; t < n_mate;t++){
+
+            if (codigo == codigos[t]){
+                verificar = true;
+                break;
+            }
+        }
+
+        if (verificar){
+            cout<<"\nEsta materia ya esta registrada!\n";
+        }
+
+    }
+
+    cout<<"Materia: ";cin>>nombre;
+    cout<<"Creditos: ";cin>>credito;
+    cout<<"Horas de clase a la semana: ";cin>>h_clase;
+
+
+    base<<codigo<< " ";
+    materia<<nombre<<'\n';
+    general<<codigo<<" "<<nombre<<" "<<credito<<" "<<h_clase<<" ";
+
+    htp = (credito*48)/16-h_clase;
+
+    if (htp > 1){
+
+        base<<htp<<'\n';
+        general<<htp<<'\n';
+    }
+
+    else{
+
+        base<<1<<'\n';
+        general<<1<<'\n';
+    }
+
+
+
+    base.close();
+    materia.close();
+    general.close();
+}
 
 void infomateria(int n_mate){
 
@@ -14,7 +87,7 @@ void infomateria(int n_mate){
         int i = 0;
         char nombre[15] = {};
 
-
+         cout<<"____________________________________________________________________________________________________________________________\n\n";
         cout<< "|  Codigo   |    Materia     |  Creditos |  H. clase | H.Estudio |\n";
 
         while(n_mate > 0){
@@ -60,47 +133,75 @@ void infomateria(int n_mate){
 
 }
 
-void terminarsemestre(){
+void nombremateria(int posicion,int x){
 
-    int hora_ini = 6;
-    int hora_fin = 22;
-    int dia = 0;
-    int n_dias = 7;
-    int posicion = 1;
-
-    ofstream archivo;
+    ifstream archivo;
     archivo.open("materia.txt");
+
+    char nombre [15] = {};
+    int i = 0;
+    int t = 0;
+
+    for (t = 0; t <= posicion; t++)
+    {
+        archivo>>nombre;
+    }
+
+    while (nombre[i] != '\0'){
+
+        i++;
+    }
+
+    i += x;
+
+    cout<<" "<<nombre;
+
+    while(i < 15){
+
+        cout<<" ";
+        i++;
+    }
+
+    cout<<"|";
+
     archivo.close();
 
-    ofstream base;
-    base.open("base.txt");
-    base.close();
 
-    ofstream estudio;
-    estudio.open("horasestudio.txt");
-    estudio.close();
+}
 
-    ofstream horariotxt;
-    horariotxt.open("horario.txt");
 
-    while (hora_ini <= hora_fin){
+//Horas de estudio
 
-        while (dia < n_dias){
+void infoestudio(int h_estudio[],int n_mate,int &total){
 
-            horariotxt << 0;
-            horariotxt<<" ";
-            dia++;
-            posicion++;
+    total = 0;
 
-        }
-        dia = 0;
-        hora_ini ++;
-        horariotxt<<"\n";
+    for(int j = 0; j < n_mate; j++){
+
+        total += h_estudio[j];
 
     }
 
-    horariotxt.close();
+    if (total <= 0){
 
+        cout<<"No tienes horas de estudio por programar: \n\n";
+    }
+
+    else{
+
+        cout<<"Tienes un total de "<<total<<" horas de estudio por programar: \n\n";
+
+        for(int j = 0; j < n_mate; j++){
+
+            if (h_estudio[j] > 0){
+
+                cout<<j<<".";
+                nombremateria(j,0);
+                cout<<"Debes programar "<<h_estudio[j]<<" horas\n";
+
+            }
+        }
+    }
 }
 
 void verifica(int &n_hora, int &pos_modif){
@@ -210,279 +311,8 @@ void verifica(int &n_hora, int &pos_modif){
 
 }
 
-void nombremateria(int posicion,int x){
 
-    ifstream archivo;
-    archivo.open("materia.txt");
-
-    char nombre [15] = {};
-    int i = 0;
-    int t = 0;
-
-    for (t = 0; t <= posicion; t++)
-    {
-        archivo>>nombre;
-    }
-
-    while (nombre[i] != '\0'){
-
-        i++;
-    }
-
-    i += x;
-
-    cout<<" "<<nombre;
-
-    while(i < 15){
-
-        cout<<" ";
-        i++;
-    }
-
-    cout<<"|";
-
-    archivo.close();
-
-
-}
-
-void contar(int &n_mate, int &n_hora){
-
-
-    char linea[20] = {};
-    n_mate = 0;
-    n_hora = 0;
-
-    ifstream base;
-    base.open("base.txt");
-
-    while(base.getline(linea,20)){
-
-        n_mate++;
-    }
-
-
-    base.close();
-
-    ifstream htp;
-    htp.open("horasestudio.txt");
-
-    while(htp.getline(linea,3)){
-
-        n_hora++;
-    }
-
-    htp.close();
-
-}
-
-void leerbase(int codigos[],int h_estudio[],int n_mate,int h_program[],int n_hora){
-
-    int n = 0;
-
-    ifstream base;
-    base.open("base.txt");
-
-
-    while(n < n_mate){
-
-        base>>codigos[n];
-        base>>h_estudio[n];
-
-        n++;
-    }
-
-    base.close();
-
-    ifstream estudio;
-    estudio.open("horasestudio.txt");
-
-    n = 0;
-
-    while(n < n_hora){
-
-        estudio>>h_program[n];
-        n++;
-    }
-
-    estudio.close();
-
-
-
-
-
-}
-
-void menuprincipal(int &menu){
-
-    cout<<"____________________________________________________________________________________________________________________________\n";
-    cout<<"\nMENU PRINCIPAL\n";
-    cout<<"\n1.Ver horario\n2.Programar horas de estudio\n3.Gestion de materias\n4.Terminar semestre\n5.Salir\n\nSelecciona:";
-    cin>>menu;
-
-
-}
-
-void imprimir(int n_mate,int codigos[],int n_hora,int h_program[]){
-
-    cout<<"____________________________________________________________________________________________________________________________\n";
-    cout<<"                                                 TU HORARIO                                                                  \n";
-    cout<<"-----------------------------------------------------------------------------------------------------------------------------\n";
-    cout<<" Hora|       Lunes    |    Martes      |    Miercoles   |     Jueves     |     Viernes    |    Sabado      |     Domingo   |\n";
-    cout<<"-----------------------------------------------------------------------------------------------------------------------------\n";
-
-
-    ifstream horariotxt;
-    horariotxt.open("horario.txt");
-
-
-
-    int hora = 6;
-    int n_horas = 22;
-    int dia = 0;
-    int valor = 0;
-    int n_dias = 7;
-
-
-    int posicion = 1;
-
-
-    while (hora <= n_horas){
-
-        if (hora < 10 ){
-
-         cout<<hora<<":00 |";
-        }
-        else{
-            cout<<hora<<":00|";
-        }
-
-        while (dia < n_dias){
-
-            horariotxt >> valor;
-
-            if (valor != 0){
-
-                for (int m = 0; m < n_mate; m++){
-
-                    if (valor == codigos[m]){
-
-                        int x = 0;
-
-                        for (int t = 0; t < n_hora; t++) {
-
-                            if (posicion == h_program[t]){
-
-                                cout<<"*";
-                                x++;
-
-                            }
-
-                        }
-
-                        nombremateria(m,x);
-
-                    }
-
-                }
-
-            }
-
-            else{
-
-                cout<<"       -        ";
-                cout<<"|";
-            }
-
-            dia++;
-            posicion++;
-
-        }
-
-        dia = 0;
-        hora ++;
-        cout<<"\n";
-
-    }
-
-    horariotxt.close();
-
-
-    cout<<"-----------------------------------------------------------------------------------------------------------------------------\n";
-    cout<<"*Horas de estudio personal\n";
-     cout<<"-----------------------------------------------------------------------------------------------------------------------------\n";
-}
-
-void agregarmateria(int &codigo,int codigos[],int n_mate,int &h_clase){
-
-    int credito = 0;
-    int htp = 0;
-    bool verificar = true;
-
-    char nombre[15]={};
-
-    ofstream base;
-    base.open("base.txt",ios::app);
-
-    ofstream materia;
-    materia.open("materia.txt",ios::app);
-
-    ofstream general;
-    general.open("general.txt",ios::app);
-
-
-
-    while(verificar){
-
-        verificar = false;
-        cout<<"Codigo : ";cin>>codigo;
-
-        for (int t = 0; t < n_mate;t++){
-
-            if (codigo == codigos[t]){
-                verificar = true;
-                break;
-            }
-        }
-
-        if (verificar){
-            cout<<"\nEsta materia ya esta registrada!\n";
-        }
-
-    }
-
-
-    cout<<"Materia: ";
-    cin>>nombre;
-
-    cout<<"Creditos : ";cin>>credito;
-    cout<<"Horas de clase a la semana: ";cin>>h_clase;
-
-
-    base<<codigo<< " ";
-    materia<<nombre<<'\n';
-    general<<codigo<<" "<<nombre<<" "<<credito<<" "<<h_clase<<" ";
-
-    htp = (credito*48)/16-h_clase;
-
-    if (htp > 1){
-
-        base<<htp<<'\n';
-        general<<htp<<'\n';
-    }
-
-    else{
-
-        base<<1<<'\n';
-        general<<1<<'\n';
-    }
-
-
-
-    base.close();
-    materia.close();
-    general.close();
-}
+//Gestion de horario
 
 void modificarhorario(int codigo,int &resta,int menu){
 
@@ -569,6 +399,7 @@ void modificarhorario(int codigo,int &resta,int menu){
 
 void actualizarhorario(){
 
+
     ifstream auxtxt;
     auxtxt.open("aux.txt");
 
@@ -605,36 +436,218 @@ void actualizarhorario(){
 
 }
 
-void infoestudio(int h_estudio[],int n_mate,int &total){
+void imprimir(int n_mate,int codigos[],int n_hora,int h_program[]){
 
-    total = 0;
+    cout<<"____________________________________________________________________________________________________________________________\n";
+    cout<<"                                                 TU HORARIO                                                                  \n";
+    cout<<"-----------------------------------------------------------------------------------------------------------------------------\n";
+    cout<<" Hora|       Lunes    |    Martes      |    Miercoles   |     Jueves     |     Viernes    |    Sabado      |     Domingo    |  *Horas de estudio\n";
+    cout<<"-----------------------------------------------------------------------------------------------------------------------------   personal\n";
 
-    for(int j = 0; j < n_mate; j++){
 
-        total += h_estudio[j];
+    ifstream horariotxt;
+    horariotxt.open("horario.txt");
 
-    }
 
-    if (total <= 0){
 
-        cout<<"No tienes horas de estudio por programar: \n\n";
-    }
+    int hora = 6;
+    int n_horas = 22;
+    int dia = 0;
+    int valor = 0;
+    int n_dias = 7;
 
-    else{
 
-        cout<<"Tienes un total de "<<total<<" horas de estudio por programar: \n\n";
+    int posicion = 1;
 
-        for(int j = 0; j < n_mate; j++){
 
-            if (h_estudio[j] > 0){
+    while (hora <= n_horas){
 
-                cout<<j<<".";
-                nombremateria(j,0);
-                cout<<"Debes programar "<<h_estudio[j]<<" horas\n";
+        if (hora < 10 ){
+
+         cout<<hora<<":00 |";
+        }
+        else{
+            cout<<hora<<":00|";
+        }
+
+        while (dia < n_dias){
+
+            horariotxt >> valor;
+
+            if (valor != 0){
+
+                for (int m = 0; m < n_mate; m++){
+
+                    if (valor == codigos[m]){
+
+                        int x = 0;
+
+                        for (int t = 0; t < n_hora; t++) {
+
+                            if (posicion == h_program[t]){
+
+                                cout<<"*";
+                                x++;
+
+                            }
+
+                        }
+
+                        nombremateria(m,x);
+
+                    }
+
+                }
 
             }
+
+            else{
+
+                cout<<"       -        ";
+                cout<<"|";
+            }
+
+            dia++;
+            posicion++;
+
         }
+
+        dia = 0;
+        hora ++;
+        cout<<"\n";
+
     }
+
+    horariotxt.close();
+
+    cout<<"-----------------------------------------------------------------------------------------------------------------------------\n";
+}
+
+
+//Generales
+
+void leerbase(int codigos[],int h_estudio[],int n_mate,int h_program[],int n_hora){
+
+    int n = 0;
+
+    ifstream base;
+    base.open("base.txt");
+
+
+    while(n < n_mate){
+
+        base>>codigos[n];
+        base>>h_estudio[n];
+
+        n++;
+    }
+
+    base.close();
+
+    ifstream estudio;
+    estudio.open("horasestudio.txt");
+
+    n = 0;
+
+    while(n < n_hora){
+
+        estudio>>h_program[n];
+        n++;
+    }
+
+    estudio.close();
+
+
+
+
+
+}
+
+void menuprincipal(int &menu){
+
+    cout<<"____________________________________________________________________________________________________________________________\n";
+    cout<<"\nMENU PRINCIPAL\n";
+    cout<<"\n1.Ver horario\n2.Programar horas de estudio\n3.Gestion de materias\n4.Terminar semestre\n5.Salir\n\nSelecciona:";
+    cin>>menu;
+
+
+}
+
+void terminarsemestre(){
+
+    int hora_ini = 6;
+    int hora_fin = 22;
+    int dia = 0;
+    int n_dias = 7;
+    int posicion = 1;
+
+    ofstream general;
+    general.open("general.txt");
+    general.close();
+
+    ofstream archivo;
+    archivo.open("materia.txt");
+    archivo.close();
+
+    ofstream base;
+    base.open("base.txt");
+    base.close();
+
+    ofstream estudio;
+    estudio.open("horasestudio.txt");
+    estudio.close();
+
+    ofstream horariotxt;
+    horariotxt.open("horario.txt");
+
+    while (hora_ini <= hora_fin){
+
+        while (dia < n_dias){
+
+            horariotxt << 0;
+            horariotxt<<" ";
+            dia++;
+            posicion++;
+
+        }
+        dia = 0;
+        hora_ini ++;
+        horariotxt<<"\n";
+
+    }
+
+    horariotxt.close();
+
+}
+
+void contar(int &n_mate, int &n_hora){
+
+
+    char linea[20] = {};
+    n_mate = 0;
+    n_hora = 0;
+
+    ifstream base;
+    base.open("base.txt");
+
+    while(base.getline(linea,20)){
+
+        n_mate++;
+    }
+
+
+    base.close();
+
+    ifstream htp;
+    htp.open("horasestudio.txt");
+
+    while(htp.getline(linea,3)){
+
+        n_hora++;
+    }
+
+    htp.close();
+
 }
 
 void actualizarbase(int codigos[],int h_estudio[],int n_mate){

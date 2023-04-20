@@ -284,6 +284,7 @@ DIST          = ../../Qt/6.2.4/gcc_64/mkspecs/features/spec_pre.prf \
 		../../Qt/6.2.4/gcc_64/mkspecs/features/qt_config.prf \
 		../../Qt/6.2.4/gcc_64/mkspecs/linux-g++/qmake.conf \
 		../../Qt/6.2.4/gcc_64/mkspecs/features/spec_post.prf \
+		../Agenda/.qmake.stash \
 		../../Qt/6.2.4/gcc_64/mkspecs/features/exclusive_builds.prf \
 		../../Qt/6.2.4/gcc_64/mkspecs/features/toolchain.prf \
 		../../Qt/6.2.4/gcc_64/mkspecs/features/default_pre.prf \
@@ -297,7 +298,7 @@ DIST          = ../../Qt/6.2.4/gcc_64/mkspecs/features/spec_pre.prf \
 		../../Qt/6.2.4/gcc_64/mkspecs/features/exceptions.prf \
 		../../Qt/6.2.4/gcc_64/mkspecs/features/yacc.prf \
 		../../Qt/6.2.4/gcc_64/mkspecs/features/lex.prf \
-		../Agenda/Agenda.pro LeerInfo.h ../Agenda/main.cpp
+		../Agenda/Agenda.pro Funciones.h ../Agenda/main.cpp
 QMAKE_TARGET  = Agenda
 DESTDIR       = 
 TARGET        = Agenda
@@ -539,6 +540,7 @@ Makefile: ../Agenda/Agenda.pro ../../Qt/6.2.4/gcc_64/mkspecs/linux-g++/qmake.con
 		../../Qt/6.2.4/gcc_64/mkspecs/features/qt_config.prf \
 		../../Qt/6.2.4/gcc_64/mkspecs/linux-g++/qmake.conf \
 		../../Qt/6.2.4/gcc_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		../../Qt/6.2.4/gcc_64/mkspecs/features/exclusive_builds.prf \
 		../../Qt/6.2.4/gcc_64/mkspecs/features/toolchain.prf \
 		../../Qt/6.2.4/gcc_64/mkspecs/features/default_pre.prf \
@@ -784,6 +786,7 @@ Makefile: ../Agenda/Agenda.pro ../../Qt/6.2.4/gcc_64/mkspecs/linux-g++/qmake.con
 ../../Qt/6.2.4/gcc_64/mkspecs/features/qt_config.prf:
 ../../Qt/6.2.4/gcc_64/mkspecs/linux-g++/qmake.conf:
 ../../Qt/6.2.4/gcc_64/mkspecs/features/spec_post.prf:
+.qmake.stash:
 ../../Qt/6.2.4/gcc_64/mkspecs/features/exclusive_builds.prf:
 ../../Qt/6.2.4/gcc_64/mkspecs/features/toolchain.prf:
 ../../Qt/6.2.4/gcc_64/mkspecs/features/default_pre.prf:
@@ -841,7 +844,7 @@ compiler_clean:
 
 ####### Compile
 
-main.o: ../Agenda/main.cpp ../Agenda/LeerInfo.h
+main.o: ../Agenda/main.cpp ../Agenda/Funciones.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../Agenda/main.cpp
 
 ####### Install

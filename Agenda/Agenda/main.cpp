@@ -3,7 +3,6 @@
 
 using namespace std;
 
-
 int main(){
 
     int codigo = 0;
@@ -14,7 +13,7 @@ int main(){
 
 
     bool ejecutar = true;
-    char repetir = 's';
+    char repetir = 'y';
 
     int n_hora = 0;
     int n_mate = 0;
@@ -23,11 +22,13 @@ int main(){
 
     while (ejecutar){
 
-        contar(n_mate,n_hora);
+
+        contar(n_mate,n_hora);  //Actualiza Informacion
         int codigos  [n_mate] = {};
         int h_estudio[n_mate] = {};
         int h_program[n_hora] = {};
         leerbase(codigos,h_estudio,n_mate,h_program,n_hora);
+
 
         menuprincipal(menu);
 
@@ -37,7 +38,8 @@ int main(){
             imprimir(n_mate,codigos,n_hora,h_program);
         }
 
-        if (menu == 2){
+
+        if (menu == 2){ //Programar horas de estudio
 
             do{
                 imprimir(n_mate,codigos,n_hora,h_program);
@@ -49,13 +51,13 @@ int main(){
                     modificarhorario(codigo,resta,menu);
                     h_estudio[opcion] = h_estudio[opcion] - resta;
                     actualizarhorario();
-                    cout<< "Quieres programar mas horas de estudio?(s/n):  ";cin>>repetir;
+                    cout<< "Quieres programar mas horas de estudio?(y/n):  ";cin>>repetir;
                 }
                 else{
                     repetir = 'n';
                 }
 
-            } while (repetir == 's');
+            } while (repetir == 'y');
 
             actualizarbase(codigos,h_estudio,n_mate);
 
@@ -63,9 +65,9 @@ int main(){
 
 
 
-        if (menu == 3){
+        if (menu == 3){ // Gestion de materias
 
-            cout<<"1. Informacion General\n2.Agregar materias al horario\n Selecciona: ";cin>>opcion;
+            cout<<"1. Informacion General\n2. Agregar materias al horario\n Selecciona: ";cin>>opcion;
 
             if (opcion == 1){
 
@@ -95,18 +97,19 @@ int main(){
                     } while (h_clase > 0);
 
                     cout<<"Guardando cambios...\n";
-                    cout<< "Quieres agregar mas de materias?(s/n):  ";cin>>repetir;
+                    cout<< "Quieres agregar mas de materias?(y/n):  ";cin>>repetir;
 
-                }while(repetir == 's');
+                }while(repetir == 'y');
             }
         }
 
 
-        if (menu == 4){
 
-            cout<<"Vas a eliminar tu horario y horas de estudio\nContinuar? (s/n) "; cin>>repetir;
+        if (menu == 4){ // Reinicia bases de datos
 
-            if(repetir == 's'){
+            cout<<"Vas a eliminar tu horario y horas de estudio\nContinuar? (y/n) "; cin>>repetir;
+
+            if(repetir == 'y'){
 
                 terminarsemestre();
 
@@ -114,7 +117,8 @@ int main(){
         }
 
 
-        if (menu == 5){
+
+        if (menu == 5){ //Salir
 
             ejecutar = false;
 
